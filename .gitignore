@@ -1,0 +1,7 @@
+#ignore all logs
+*.log
+*.class
+*.iml
+**/target
+dependency-reduced-pom.xml
+**/.idea
