@@ -25,7 +25,7 @@ associated with it. No other options exists
 
 
 
-Bugs/Limitations:
+Bugs:
 * Output has amazon java sdk warning which can be ignored
 * There is a bug in bucket policy evaluation. The tool will look for explicit deny rules and overrules any explicit allow rules.
 But since the permissions in policy is fine grained, even if one of the permission in the category is in the 'deny' policy
