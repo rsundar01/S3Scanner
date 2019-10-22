@@ -31,4 +31,5 @@ Bugs:
 But since the permissions in policy is fine grained, even if one of the permission in the category is in the 'deny' policy
 the tool will apply the rule for the entire category. For example, deny on get-object will be translated to deny on READ. This
 is a bug
+   [UPDATE:  This bug has been fixed. Currently the tool looks only specifically at the deny all operation for all principals from all of internet policy to offset any Allows. This is not ideal but atleast doesn't provide the false negatives]
 * Intended location of the state file is ~/.s3scanner/ but the tool now writes it to ~/
