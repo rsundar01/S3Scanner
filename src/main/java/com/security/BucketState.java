@@ -13,7 +13,7 @@ public class BucketState implements Serializable {
 
     public BucketState(byte[] hashGrant){
         if(hashGrant != null) {
-            System.arraycopy(this.hashGrant, 0, hashGrant, 0,
+            System.arraycopy(hashGrant, 0, this.hashGrant, 0,
                     (hashGrant.length < this.hashGrant.length) ? hashGrant.length
                             : this.hashGrant.length);
         }
@@ -23,7 +23,7 @@ public class BucketState implements Serializable {
         this(hashGrant);
 
         if(hashPolicy != null) {
-            System.arraycopy(this.hashPolicy, 0, hashPolicy, 0,
+            System.arraycopy(hashPolicy, 0, this.hashPolicy, 0,
                     hashPolicy.length < this.hashPolicy.length ? hashPolicy.length
                             : this.hashPolicy.length);
         }

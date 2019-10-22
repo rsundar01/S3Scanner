@@ -71,7 +71,7 @@ public class S3BucketScannerTest
 
     @Test
     public void TestBucketPolicyEvaluation7(){
-        evaluateBucketPolicy(new int[]{1,1,1,1,3}, BucketPolicySamples.BucketPolicy7,  "examplebucket");
+        evaluateBucketPolicy(new int[]{1,1,1,1,2}, BucketPolicySamples.BucketPolicy7,  "examplebucket");
     }
 
     @Test
@@ -81,7 +81,7 @@ public class S3BucketScannerTest
 
     @Test
     public void TestBucketPolicyEvaluation9(){
-        evaluateBucketPolicy(new int[]{2,1,1,1,3}, BucketPolicySamples.BucketPolicy9,  "examplebucket");
+        evaluateBucketPolicy(new int[]{2,1,1,1,1}, BucketPolicySamples.BucketPolicy9,  "examplebucket");
     }
 
     @Test

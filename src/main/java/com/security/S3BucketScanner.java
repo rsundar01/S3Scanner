@@ -121,9 +121,13 @@ public class S3BucketScanner {
                 BucketPolicy bucketPolicy = s3.getBucketPolicy(bucket.getName());
                 BucketState curState = getBucketState(bucketPolicy, grants);
                 if(bucketStateMap.containsKey(bucket.getName())){
-                    if(curState.equals(bucketStateMap.get(bucket.getName())) && bucketStateMap.get(bucket.getName()).getAllowedAccess().size() > 0) {
-                        resultMap.put(bucket.getName(), bucketStateMap.get(bucket.getName()).getAllowedAccess());
+                    if(curState.equals(bucketStateMap.get(bucket.getName()))) {
+                        if(bucketStateMap.get(bucket.getName()).getAllowedAccess().size() > 0) {
+                            resultMap.put(bucket.getName(), bucketStateMap.get(bucket.getName()).getAllowedAccess());
+                        }
                         continue;
+                    } else {
+                        bucketStateMap.replace(bucket.getName(), curState);
                     }
                 } else {
                     bucketStateMap.put(bucket.getName(), curState);
@@ -222,12 +226,21 @@ public class S3BucketScanner {
 
             }
 
+
+            // Check for effect
+            if(current.get("Effect").equals("Allow")) {
+                allow = true;
+            }
+
+
             // Check for condition
             if(current.has("Condition")){
+                if(!allow) continue;
+
                 JSONObject condition = current.getJSONObject("Condition");
                 boolean srcAddressPositive, srcAddressNegative;
-                srcAddressNegative = condition.has("NotIpAddress") ? true : false;
-                srcAddressPositive = condition.has("IpAddress") ? true : false;
+                srcAddressNegative = condition.has("NotIpAddress");
+                srcAddressPositive = condition.has("IpAddress");
                 JSONObject IpAddressObject = srcAddressPositive ? condition.getJSONObject("IpAddress") : null;
                 JSONObject NotIpAddressObject = srcAddressNegative ? condition.getJSONObject("NotIpAddress") : null;
                 String srcIp = IpAddressObject != null && IpAddressObject.has("aws:SourceIp") ? IpAddressObject.getString("aws:SourceIp") : "";
@@ -241,10 +254,6 @@ public class S3BucketScanner {
                 }
             }
 
-            // Check for effect
-            if(current.get("Effect").equals("Allow")) {
-                allow = true;
-            }
 
             if( allow ) {
                 permAssign = 2;
@@ -270,7 +279,9 @@ public class S3BucketScanner {
                     throw new RuntimeException("Invalid permission in 'Action' field of the bucket policy");
                 } else {
                     String action = classificationMap.get(actionPerm);
-                    if(evaluationMap.get(action) < permAssign) evaluationMap.put(action, permAssign);
+                    if(evaluationMap.get(action) < permAssign && (permAssign == 2 || action.equals("FULL_CONTROL"))) {
+                        evaluationMap.put(action, permAssign);
+                    }
                 }
             }
 

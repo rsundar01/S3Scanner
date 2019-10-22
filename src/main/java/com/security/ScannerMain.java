@@ -14,6 +14,7 @@ public class ScannerMain
     {
         S3BucketScanner s3BucketScanner = new S3BucketScanner();
         s3BucketScanner.configure(null);
+        System.out.println("Open Buckets: ");
         System.out.println(s3BucketScanner.execute());
 
     }
